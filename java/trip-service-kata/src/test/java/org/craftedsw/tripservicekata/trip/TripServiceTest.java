@@ -1,6 +1,9 @@
 package org.craftedsw.tripservicekata.trip;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
+
+import java.util.List;
 
 import org.craftedsw.tripservicekata.exception.UserNotLoggedInException;
 import org.craftedsw.tripservicekata.user.User;
@@ -26,7 +29,8 @@ public class TripServiceTest {
 	@Test()
 	public void test_getTripsByUser_to_return_empty_trip_when_not_a_friend()  {
 		sessionUser=new User();
-		tripService.getTripsByUser(new User());
+		List<Trip> friendTrips=tripService.getTripsByUser(new User());
+		assertThat(friendTrips.isEmpty(), is(true));
 	}
 	
 	private class TestTripService extends TripService{
