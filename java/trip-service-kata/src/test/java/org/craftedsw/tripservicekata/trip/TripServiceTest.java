@@ -20,27 +20,27 @@ public class TripServiceTest {
 	@Before
 	public void setup(){
 		tripService=new TestTripService();
+		sessionUser=new User();
 	}
 		
 	@Test(expected = UserNotLoggedInException.class)
-	public void test_getTripsByUser_for_user_not_loggedin_exception()  {
+	public void test_getTripsByUser_throws_exception_when_user_not_loggedin()  {
+		sessionUser=null;
 		tripService.getTripsByUser(new User());
 	}
 	
 	@Test()
-	public void test_getTripsByUser_to_return_empty_trip_when_not_a_friend()  {
-		sessionUser=new User();
+	public void test_getTripsByUser_to_return_empty_trip_when_user_is_not_a_friend()  {
 		List<Trip> friendTrips=tripService.getTripsByUser(new User());
 		assertThat(friendTrips.size(), is(0));
 	}
 	
 	@Test()
-	public void test_getTripsByUser_to_return_trips_when_a_friend()  {
-		sessionUser=new User();
+	public void test_getTripsByUser_to_return_trips_when_user_is_a_friend()  {
 		User friend=new User();
 		friend.addFriend(sessionUser);
-		
 		List<Trip> friendTrips=tripService.getTripsByUser(friend);
+		
 		assertThat(friendTrips.size(), is(1));
 	}
 	
