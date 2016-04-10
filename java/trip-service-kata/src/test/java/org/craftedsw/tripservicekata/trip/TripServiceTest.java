@@ -3,6 +3,7 @@ package org.craftedsw.tripservicekata.trip;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.craftedsw.tripservicekata.exception.UserNotLoggedInException;
@@ -30,13 +31,30 @@ public class TripServiceTest {
 	public void test_getTripsByUser_to_return_empty_trip_when_not_a_friend()  {
 		sessionUser=new User();
 		List<Trip> friendTrips=tripService.getTripsByUser(new User());
-		assertThat(friendTrips.isEmpty(), is(true));
+		assertThat(friendTrips.size(), is(0));
+	}
+	
+	@Test()
+	public void test_getTripsByUser_to_return_trips_when_a_friend()  {
+		sessionUser=new User();
+		User friend=new User();
+		friend.addFriend(sessionUser);
+		
+		List<Trip> friendTrips=tripService.getTripsByUser(friend);
+		assertThat(friendTrips.size(), is(1));
 	}
 	
 	private class TestTripService extends TripService{
 		@Override
 		protected User getLoggedUser() {
 			return sessionUser;
+		}
+		
+		@Override
+		protected List<Trip> getTripsOf(User user) {
+			List<Trip> tripList=new ArrayList<Trip>();
+			tripList.add(new Trip());
+			return tripList;
 		}
 	}
 	
